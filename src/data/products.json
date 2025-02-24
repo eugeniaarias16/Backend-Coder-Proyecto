@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1,
+    "status": true,
+    "title": "Silla Gamer Corsair T3 Rush",
+    "description": "Silla ergonómica con ajuste de altura y soporte lumbar.",
+    "price": 349.99,
+    "stock": 8,
+    "category": "Muebles",
+    "thumbnails": [
+      "https://example.com/images/silla1.jpg",
+      "https://example.com/images/silla2.jpg"
+    ]
+  },
+  {
+    "id": 2,
+    "status": true,
+    "title": "Teclado Mecánico HyperX Alloy",
+    "description": "Teclado con switches mecánicos rojos y retroiluminación RGB.",
+    "price": 129.99,
+    "stock": 20,
+    "category": "Periféricos",
+    "thumbnails": [
+      "https://example.com/images/teclado1.jpg"
+    ]
+  },
+  {
+    "id": 4,
+    "status": true,
+    "title": "Samsung Galaxy S23 Ultra",
+    "description": "Teléfono con pantalla AMOLED de 120Hz y cámara de 200MP.",
+    "price": 1399.99,
+    "stock": 15,
+    "category": "Celulares",
+    "thumbnails": [
+      "https://example.com/images/samsung1.jpg",
+      "https://example.com/images/samsung2.jpg"
+    ]
+  },
+  {
+    "id": 5,
+    "status": true,
+    "title": "Laptop Gamer ASUS ROG",
+    "description": "Laptop de alto rendimiento con procesador i9 y tarjeta gráfica RTX 4080.",
+    "price": 2599.99,
+    "stock": 5,
+    "category": "Tecnología",
+    "thumbnails": [
+      "https://example.com/images/laptop1.jpg",
+      "https://example.com/images/laptop2.jpg"
+    ]
+  }
+]
