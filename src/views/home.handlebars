@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+    <link rel="stylesheet" href="../public/css/style.css">
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <div class="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h1 class="text-3xl font-bold text-center text-blue-600">Lista de Productos</h1>
+
+        <ul class="mt-4 space-y-2">
+            {{#each products}}
+                <li class="flex justify-between items-center p-3 bg-gray-200 rounded-md hover:bg-gray-300 transition">
+                    <span class="text-lg font-medium">{{this.title}}</span>
+                    <span class="px-3 py-1 bg-green-500 text-white rounded-md">${{this.price}}</span>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+
+</body>
+</html>

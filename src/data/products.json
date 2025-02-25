@@ -49,5 +49,49 @@
       "https://example.com/images/laptop1.jpg",
       "https://example.com/images/laptop2.jpg"
     ]
+  },
+  {
+    "id": 6,
+    "status": true,
+    "title": "pistola electrica",
+    "price": 200,
+    "description": "pistola para defensa personal",
+    "category": "armas",
+    "stock": 50,
+    "code": "P1740488200787",
+    "thumbnails": []
+  },
+  {
+    "id": 7,
+    "status": true,
+    "title": "tarjeta de beisbol",
+    "price": 10,
+    "description": "tarjeta deportiva",
+    "category": "deporte",
+    "stock": 11,
+    "code": "P1740488261438",
+    "thumbnails": []
+  },
+  {
+    "id": 8,
+    "status": true,
+    "title": "pelota de futbols seleccion '24",
+    "price": 50,
+    "description": "pelota del mundial-seleccion argentina",
+    "category": "deporte",
+    "stock": 20,
+    "code": "P1740488967905",
+    "thumbnails": []
+  },
+  {
+    "id": 9,
+    "status": true,
+    "title": "camistea adidas",
+    "price": 20,
+    "description": "camiseta de tennis",
+    "category": "indumentaria",
+    "stock": 50,
+    "code": "P1740489664198",
+    "thumbnails": []
   }
 ]

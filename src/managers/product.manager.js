@@ -23,7 +23,7 @@ import fs from "node:fs";
   async getProductsById(id) {
     try {
       const products = await this.getAllProducts();
-      return products.find((product) => product, id === id);
+      return products.find((product) => product.id === id);
     } catch (error) {
       console.log("Error obteniendo producto por id", error);
       return null;

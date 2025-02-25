@@ -1,21 +1,15 @@
 import { Router } from "express";
-import ProductManager from "file:///C:/Users/usuario/Documents/PROGRAMACION/Backend-Coder-Proyecto/src/managers/product.manager.js";
-export const router = Router();
-
+import ProductManager from "../managers/product.manager.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Obtener __dirname en ES Modules
+const router = Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Crear el gestor de productos con una ruta absoluta
 const productManager = new ProductManager(path.join(__dirname, '../data/products.json'));
 
-
-
-
-//Obtener todos los productos
+// Obtener todos los productos
 router.get("/", async (req, res) => {
   const { limit } = req.query;
   const products = await productManager.getAllProducts(
@@ -24,56 +18,81 @@ router.get("/", async (req, res) => {
   res.json(products);
 });
 
-//Obtener un producto por id
+// Obtener un producto por id
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const product = await productManager.getProdcutsById(parseInt(id));
 
+    if (!product) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
     res.json(product);
   } catch (error) {
-    return res
-      .status(404)
-      .json({ error: "error", message: "Product not found" });
+    return res.status(404).json({ error: "Error", message: error.message });
   }
 });
 
-//Agegar un producto
+// Agregar un producto
 router.post("/", async (req, res) => {
   try {
+    const io = req.app.get("socketio"); // Obtener socket.io desde el servidor
     const newProduct = await productManager.addProduct(req.body);
-    res.json(newProduct);
+
+    if (!newProduct) {
+      return res.status(400).json({ error: "Faltan campos requeridos" });
+    }
+
+    const products = await productManager.getAllProducts();
+    io.emit("updateProducts", products); // Enviar evento a todos los clientes
+
+    res.status(201).json(newProduct);
   } catch (error) {
-    return res
-      .status(404)
-      .json({ error: "error", message: "Cannot add product" });
+    res.status(500).json({ error: "Internal Server Error", message: error.message });
   }
 });
 
-//Actualizar un producto por id
+// Actualizar un producto por id
 router.put("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const productData = req.body;
     const product = await productManager.updateProduct(id, productData);
+
+    if (!product) {
+      return res.status(404).json({ error: "Producto no encontrado para actualizar" });
+    }
+
+    // Emitir evento para actualizar la lista de productos
+    const io = req.app.get("socketio");
+    const products = await productManager.getAllProducts();
+    io.emit("updateProducts", products);
+
     res.json(product);
   } catch (error) {
-    return res
-      .status(404)
-      .json({ error: "error", message: "Cannot update product" });
+    return res.status(500).json({ error: "Error interno", message: error.message });
   }
 });
 
-//Eliminar un producto por id
+// Eliminar un producto por id
 router.delete("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    await productManager.deleteProduct(id);
-    res.json({ message: "Product deleted" });
+    const productDeleted = await productManager.deleteProduct(id);
+
+    if (!productDeleted) {
+      return res.status(404).json({ error: "Producto no encontrado para eliminar" });
+    }
+
+    // Emitir evento para actualizar la lista de productos
+    const io = req.app.get("socketio");
+    const products = await productManager.getAllProducts();
+    io.emit("updateProducts", products);
+
+    res.json({ message: "Producto eliminado" });
   } catch (error) {
-    return res
-      .status(404)
-      .json({ error: "error", message: "Cannot delete product" });
+    return res.status(500).json({ error: "Error interno", message: error.message });
   }
 });
+
 export default router;

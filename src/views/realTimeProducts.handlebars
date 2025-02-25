@@ -1,0 +1,191 @@
+<h1>Productos en Tiempo Real</h1>
+<ul id="product-list">
+    {{#each products}}
+        <li id="product-{{this.id}}">{{this.title}} - ${{this.price}}</li>
+    {{/each}}
+</ul>
+
+<h2>Agregar Producto</h2>
+<form id="addProductForm">
+
+
+    <div>
+        <label for="title">Título:</label>
+        <input type="text" id="title" placeholder="Título" required>
+    </div>
+    <div>
+        <label for="price">Precio:</label>
+        <input type="number" id="price" placeholder="Precio" required>
+    </div>
+    <div>
+        <label for="description">Descripción:</label>
+        <input type="text" id="description" placeholder="Descripción" required>
+    </div>
+    <div>
+        <label for="category">Categoría:</label>
+        <input type="text" id="category" placeholder="Categoría" required>
+    </div>
+    <div>
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" placeholder="Stock" required>
+    </div>
+    <button type="submit">Agregar</button>
+   
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    document.getElementById("addProductForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const title = document.getElementById("title").value;
+        const price = document.getElementById("price").value;
+        const description = document.getElementById("description").value;
+        const category = document.getElementById("category").value;
+        const stock = document.getElementById("stock").value;
+
+        // Enviar objeto con todos los campos requeridos
+        socket.emit("newProduct", { 
+            title, 
+            price: Number(price), 
+            description, 
+            category, 
+            stock: Number(stock),
+            // Campos adicionales comunes (puedes ajustarlos según tus necesidades)
+            code: `P${Date.now()}`, // Código único generado con timestamp
+            status: true,
+            thumbnails: []
+        });
+        
+        document.getElementById("addProductForm").reset();
+    });
+
+    socket.on("updateProducts", (products) => {
+        console.log("Productos actualizados:", products);
+        const productList = document.getElementById("product-list");
+        productList.innerHTML = "";
+        
+        if (products.length === 0) {
+            productList.innerHTML = "<li>No hay productos disponibles</li>";
+            return;
+        }
+        
+        products.forEach(product => {
+            productList.innerHTML += `
+         
+                <li id="product-${product.id}">
+                    <strong>${product.title}</strong> - $${product.price} 
+                    <br>Categoría: ${product.category} 
+                    <br>Stock: ${product.stock}
+                    <br>${product.description}
+                </li>
+            
+                `
+                ;
+        });
+    });
+    
+    // Confirmación de conexión
+    socket.on("connect", () => {
+        console.log("Conectado al servidor con ID:", socket.id);
+    });
+</script>
+
+<style>
+  body {
+    background-color: #1c1c1c; 
+    color: #e0e0e0; 
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 3rem;
+    color: #ffffff;
+  }
+  h2{
+    text-align: center;
+    font-size: 2rem;
+    color: #cccccc96;
+  }
+
+
+  #product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    text-decoration: none;
+  }
+
+  #product-list li {
+    background-color: #2b2b2b;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    color: #ffffff;
+    transition: transform 0.2s;
+    
+  }
+
+  #product-list li:hover {
+    transform: translateY(-5px);
+  }
+
+  #product-list strong {
+    font-size: 1.2rem;
+    color: #ffffff;
+  }
+
+  form {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #2b2b2b;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+
+  form div {
+    margin-bottom: 25px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #cccccc;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background-color: #444444;
+    color: #ffffff;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: #8e44ad;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 50%;
+    align-self: center;
+  }
+
+  button:hover {
+    background-color: #9b59b6;
+  }
+</style>
+
