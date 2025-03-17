@@ -1,25 +1,176 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Productos</title>
-    <link rel="stylesheet" href="../public/css/style.css">
-</head>
-<body class="bg-gray-100 font-sans">
-
-    <div class="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
-        <h1 class="text-3xl font-bold text-center text-blue-600">Lista de Productos</h1>
-
-        <ul class="mt-4 space-y-2">
-            {{#each products}}
-                <li class="flex justify-between items-center p-3 bg-gray-200 rounded-md hover:bg-gray-300 transition">
-                    <span class="text-lg font-medium">{{this.title}}</span>
-                    <span class="px-3 py-1 bg-green-500 text-white rounded-md">${{this.price}}</span>
-                </li>
-            {{/each}}
-        </ul>
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="text-center">Catálogo de Productos</h1>
     </div>
+</div>
 
-</body>
-</html>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form id="filter-form" method="GET" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="category" class="form-label">Categoría:</label>
+                        <select name="category" id="category" class="form-select">
+                            <option value="">Todas las categorías</option>
+                            <option value="electronics" {{#if (eq category "electronics")}}selected{{/if}}>Electrónica</option>
+                            <option value="clothing" {{#if (eq category "clothing")}}selected{{/if}}>Ropa</option>
+                            <option value="home" {{#if (eq category "home")}}selected{{/if}}>Hogar</option>
+                            <option value="food" {{#if (eq category "food")}}selected{{/if}}>Alimentos</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="sort" class="form-label">Ordenar por precio:</label>
+                        <select name="sort" id="sort" class="form-select">
+                            <option value="">Sin ordenar</option>
+                            <option value="asc" {{#if (eq sort "asc")}}selected{{/if}}>Menor a mayor</option>
+                            <option value="desc" {{#if (eq sort "desc")}}selected{{/if}}>Mayor a menor</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Aplicar filtros</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+    {{#if products.length}}
+        {{#each products}}
+            <div class="col">
+                <div class="card h-100">
+                    {{#if thumbnails.[0]}}
+                        <img src="{{thumbnails.[0]}}" class="card-img-top" alt="{{title}}" style="height: 200px; object-fit: cover;">
+                    {{else}}
+                        <div class="text-center py-5 bg-light">
+                            <i class="fas fa-image fa-3x text-secondary"></i>
+                        </div>
+                    {{/if}}
+                    <div class="card-body">
+                        <h5 class="card-title">{{title}}</h5>
+                        <p class="card-text text-success fw-bold">${{price}}</p>
+                        <p class="card-text">{{description}}</p>
+                        <p class="card-text"><small class="text-muted">Categoría: {{category}}</small></p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="/products/{{_id}}" class="btn btn-primary">Ver detalles</a>
+                        <button class="btn btn-success add-to-cart" data-product-id="{{_id}}">
+                            <i class="fas fa-cart-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    {{else}}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                No se encontraron productos con los filtros seleccionados.
+            </div>
+        </div>
+    {{/if}}
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="Paginación de productos">
+            <ul class="pagination justify-content-center">
+                {{#if pagination.hasPrevPage}}
+                    <li class="page-item">
+                        <a class="page-link" href="{{pagination.prevLink}}" aria-label="Anterior">
+                            <span aria-hidden="true">&laquo;</span> Anterior
+                        </a>
+                    </li>
+                {{else}}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            <span aria-hidden="true">&laquo;</span> Anterior
+                        </span>
+                    </li>
+                {{/if}}
+                
+                <li class="page-item disabled">
+                    <span class="page-link">Página {{pagination.page}} de {{pagination.totalPages}}</span>
+                </li>
+                
+                {{#if pagination.hasNextPage}}
+                    <li class="page-item">
+                        <a class="page-link" href="{{pagination.nextLink}}" aria-label="Siguiente">
+                            Siguiente <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {{else}}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            Siguiente <span aria-hidden="true">&raquo;</span>
+                        </span>
+                    </li>
+                {{/if}}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Agregar productos al carrito
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', async function() {
+                const productId = this.getAttribute('data-product-id');
+                
+                try {
+                    // Obtener o crear un carrito
+                    let cartId = localStorage.getItem('cartId');
+                    
+                    if (!cartId) {
+                        // Si no hay carrito, crear uno nuevo
+                        const response = await fetch('/api/carts', {
+                            method: 'POST'
+                        });
+                        
+                        const data = await response.json();
+                        cartId = data.payload._id;
+                        localStorage.setItem('cartId', cartId);
+                        
+                        // Actualizar el enlace del carrito en la navegación
+                        const cartLink = document.getElementById('cart-link');
+                        if (cartLink) {
+                            cartLink.href = `/carts/${cartId}`;
+                        }
+                    }
+                    
+                    // Agregar el producto al carrito
+                    const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ quantity: 1 })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Error al agregar el producto al carrito');
+                    }
+                    
+                    // Incrementar el contador de productos en el carrito
+                    const cartCount = document.getElementById('cart-count');
+                    if (cartCount) {
+                        cartCount.textContent = parseInt(cartCount.textContent) + 1;
+                    }
+                    
+                    // Mostrar mensaje de éxito
+                    alert('Producto agregado al carrito');
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error al agregar el producto al carrito');
+                }
+            });
+        });
+    });
+</script>

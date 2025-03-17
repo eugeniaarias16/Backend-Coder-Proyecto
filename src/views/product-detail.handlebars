@@ -1,0 +1,161 @@
+<div class="row">
+    <div class="col-12 mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/products">Productos</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{product.title}}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            {{#if product.thumbnails.length}}
+                <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {{#each product.thumbnails}}
+                            <div class="carousel-item {{#if @first}}active{{/if}}">
+                                <img src="{{this}}" class="d-block w-100" alt="{{../product.title}}" style="height: 400px; object-fit: contain;">
+                            </div>
+                        {{/each}}
+                    </div>
+                    {{#if (gt product.thumbnails.length 1)}}
+                        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    {{/if}}
+                </div>
+            {{else}}
+                <div class="text-center py-5 bg-light">
+                    <i class="fas fa-image fa-5x text-secondary"></i>
+                    <p class="mt-3">No hay imágenes disponibles</p>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title mb-3">{{product.title}}</h1>
+                
+                <div class="mb-3">
+                    <h3 class="text-success">${{product.price}}</h3>
+                </div>
+                
+                <div class="mb-3">
+                    <p><strong>Código:</strong> {{product.code}}</p>
+                </div>
+                
+                <div class="mb-3">
+                    <p><strong>Categoría:</strong> {{product.category}}</p>
+                </div>
+                
+                <div class="mb-3">
+                    <p><strong>Stock disponible:</strong> {{product.stock}} unidades</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>Descripción:</h5>
+                    <p>{{product.description}}</p>
+                </div>
+                
+                <form id="add-to-cart-form" class="mb-3">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-auto">
+                            <label for="quantity" class="col-form-label">Cantidad:</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="number" id="quantity" class="form-control" value="1" min="1" max="{{product.stock}}">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-success" id="add-to-cart-btn" data-product-id="{{product._id}}">
+                                <i class="fas fa-cart-plus"></i> Agregar al carrito
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="d-grid">
+                    <a href="/products" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Volver al catálogo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addToCartForm = document.getElementById('add-to-cart-form');
+        const quantityInput = document.getElementById('quantity');
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        
+        addToCartForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const productId = addToCartBtn.getAttribute('data-product-id');
+            const quantity = parseInt(quantityInput.value, 10);
+            
+            if (isNaN(quantity) || quantity < 1) {
+                alert('Por favor, ingrese una cantidad válida');
+                return;
+            }
+            
+            try {
+                // Obtener o crear un carrito
+                let cartId = localStorage.getItem('cartId');
+                
+                if (!cartId) {
+                    // Si no hay carrito, crear uno nuevo
+                    const response = await fetch('/api/carts', {
+                        method: 'POST'
+                    });
+                    
+                    const data = await response.json();
+                    cartId = data.payload._id;
+                    localStorage.setItem('cartId', cartId);
+                    
+                    // Actualizar el enlace del carrito en la navegación
+                    const cartLink = document.getElementById('cart-link');
+                    if (cartLink) {
+                        cartLink.href = `/carts/${cartId}`;
+                    }
+                }
+                
+                // Agregar el producto al carrito
+                const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ quantity })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error al agregar el producto al carrito');
+                }
+                
+                // Incrementar el contador de productos en el carrito
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) {
+                    cartCount.textContent = parseInt(cartCount.textContent) + quantity;
+                }
+                
+                // Mostrar mensaje de éxito
+                alert('Producto agregado al carrito');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al agregar el producto al carrito');
+            }
+        });
+    });
+</script>
