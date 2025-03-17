@@ -8,10 +8,11 @@
                     <label for="category" class="form-label">Categoría:</label>
                     <select name="category" id="category" class="form-select">
                         <option value="">Todas las categorías</option>
-                        <option value="electronics" {{#if (eq category "electronics")}}selected{{/if}}>Electrónica</option>
-                        <option value="clothing" {{#if (eq category "clothing")}}selected{{/if}}>Ropa</option>
-                        <option value="home" {{#if (eq category "home")}}selected{{/if}}>Hogar</option>
-                        <option value="food" {{#if (eq category "food")}}selected{{/if}}>Alimentos</option>
+                        {{#each categories}}
+                            <option value="{{this}}" {{#if (eq ../category this)}}selected{{/if}}>
+                                {{capitalize this}}
+                            </option>
+                        {{/each}}
                     </select>
                 </div>
                 

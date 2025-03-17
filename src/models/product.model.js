@@ -1,7 +1,14 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
+import { v4 as uuidv4 } from 'uuid';
 
 const productSchema = new mongoose.Schema({
+  uuid: {
+    type: String,
+    unique: true,  
+    default: () => uuidv4(),
+    required: true
+  },
   title: {
     type: String,
     required: true,
@@ -11,11 +18,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  code: {
-    type: String,
-    unique: true,
-    trim: true
-  },
+
   price: {
     type: Number,
     required: true,

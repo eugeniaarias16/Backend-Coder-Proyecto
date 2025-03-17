@@ -6,38 +6,43 @@ const router = Router();
 
 router.get("/products", async (req, res) => {
     try {
-    const { limit = 10, page = 1, sort, category } = req.query;
+        const { limit = 10, page = 1, sort, category } = req.query;
 
-    const options = {
-        limit: parseInt(limit),
-        page: parseInt(page),
-        sort,
-        category,
-    };
+        const options = {
+            limit: parseInt(limit),
+            page: parseInt(page),
+            sort,
+            category: category ? category.toLowerCase().trim() : undefined
+        };
 
-    const result = await productManager.getProducts(options);
+        // Obtener productos filtrados
+        const result = await productManager.getProducts(options);
 
-    res.render("productsList", {
-        products: result.payload,
-        pagination: {
-        totalPages: result.totalPages,
-        prevPage: result.prevPage,
-        nextPage: result.nextPage,
-        page: result.page,
-        hasPrevPage: result.hasPrevPage,
-        hasNextPage: result.hasNextPage,
-        prevLink: result.prevLink,
-        nextLink: result.nextLink,
-        },
-        category,
-        sort,
-    });
+        // Obtener categorías únicas
+        const uniqueCategories = await productManager.getUniqueCategories();
+
+        res.render("productsList", {
+            products: result.payload,
+            pagination: {
+                totalPages: result.totalPages,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                page: result.page,
+                hasPrevPage: result.hasPrevPage,
+                hasNextPage: result.hasNextPage,
+                prevLink: result.prevLink,
+                nextLink: result.nextLink
+            },
+            categories: uniqueCategories, // Pasar categorías dinámicamente
+            category, // Mantener categoría seleccionada
+            sort
+        });
     } catch (error) {
-    console.error("Error al obtener productos:", error);
-    res.status(500).render("error", {
-        message: "Error al cargar productos",
-        layout: "main",
-    });
+        console.error("Error al obtener productos:", error);
+        res.status(500).render("error", {
+            message: "Error al cargar productos",
+            layout: "main"
+        });
     }
 });
 

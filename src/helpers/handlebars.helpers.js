@@ -76,5 +76,10 @@ export default {
       return text.substring(0, length) + '...';
     }
     return text;
+  },
+
+  capitalize: function(text) {
+    if (!text) return '';
+    return text.charAt(0).toUpperCase() + text.slice(1);
   }
 };

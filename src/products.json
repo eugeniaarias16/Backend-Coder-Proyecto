@@ -1,0 +1,187 @@
+[
+  {
+    "title": "MacBook Pro 16 M2 Pro",
+    "description": "Potente laptop profesional con chip M2 Pro, 16GB RAM y 512GB SSD",
+    "price": 2499.99,
+    "status": true,
+    "stock": 15,
+    "category": "tecnologia",
+    "thumbnails": [
+      "https://example.com/mac-pro-1.jpg",
+      "https://example.com/mac-pro-2.jpg"
+    ]
+  },
+  {
+    "title": "Audífonos Sony WH-1000XM5",
+    "description": "Auriculares inalámbricos con cancelación de ruido premium",
+    "price": 399.99,
+    "status": true,
+    "stock": 30,
+    "category": "audio",
+    "thumbnails": [
+      "https://example.com/sony-headphones-1.jpg"
+    ]
+  },
+  {
+    "title": "Monitor LG UltraWide 34\"",
+    "description": "Monitor curvo profesional con resolución 3440x1440 y frecuencia de 144Hz",
+    "price": 649.99,
+    "status": true,
+    "stock": 20,
+    "category": "tecnologia",
+    "thumbnails": [
+      "https://example.com/lg-monitor-1.jpg",
+      "https://example.com/lg-monitor-2.jpg"
+    ]
+  },
+  {
+    "title": "Teclado Mecánico Razer BlackWidow V3",
+    "description": "Teclado gaming con switches mecánicos verdes y retroiluminación RGB",
+    "price": 159.99,
+    "status": true,
+    "stock": 25,
+    "category": "perifericos",
+    "thumbnails": [
+      "https://example.com/razer-keyboard-1.jpg"
+    ]
+  },
+  {
+    "title": "iPad Pro 12.9\" M2",
+    "description": "Tablet profesional con chip M2, pantalla Liquid Retina XDR y 512GB",
+    "price": 1599.99,
+    "status": true,
+    "stock": 10,
+    "category": "tecnologia",
+    "thumbnails": [
+      "https://example.com/ipad-pro-1.jpg",
+      "https://example.com/ipad-pro-2.jpg"
+    ]
+  },
+  {
+    "title": "Samsung Galaxy S23 Ultra",
+    "description": "Smartphone con cámara de 200MP, pantalla Dynamic AMOLED 2X y 512GB",
+    "price": 1299.99,
+    "status": true,
+    "stock": 18,
+    "category": "celulares",
+    "thumbnails": [
+      "https://example.com/samsung-s23-1.jpg",
+      "https://example.com/samsung-s23-2.jpg"
+    ]
+  },
+  {
+    "title": "Smartwatch Apple Watch Series 8",
+    "description": "Reloj inteligente con monitoreo de salud, GPS y resistencia al agua",
+    "price": 399.00,
+    "status": true,
+    "stock": 40,
+    "category": "wearables",
+    "thumbnails": [
+      "https://example.com/apple-watch-1.jpg"
+    ]
+  },
+  {
+    "title": "Drone DJI Mavic 3",
+    "description": "Drone profesional con cámara Hasselblad, vuelo de 46 minutos y 5.1K",
+    "price": 2049.00,
+    "status": true,
+    "stock": 8,
+    "category": "fotografia",
+    "thumbnails": [
+      "https://example.com/dji-mavic-1.jpg",
+      "https://example.com/dji-mavic-2.jpg"
+    ]
+  },
+  {
+    "title": "Consola PlayStation 5 Digital",
+    "description": "Consola de última generación sin lector de discos, 825GB SSD",
+    "price": 399.99,
+    "status": true,
+    "stock": 12,
+    "category": "gaming",
+    "thumbnails": [
+      "https://example.com/ps5-1.jpg"
+    ]
+  },
+  {
+    "title": "Cámara Canon EOS R6 Mark II",
+    "description": "Cámara mirrorless full-frame con sensor de 24.2MP y video 4K",
+    "price": 2699.00,
+    "status": true,
+    "stock": 6,
+    "category": "fotografia",
+    "thumbnails": [
+      "https://example.com/canon-r6-1.jpg",
+      "https://example.com/canon-r6-2.jpg"
+    ]
+  },
+  {
+    "title": "Altavoz Inteligente Sonos One SL",
+    "description": "Altavoz WiFi con sonido estéreo y compatible con múltiples servicios",
+    "price": 199.00,
+    "status": true,
+    "stock": 35,
+    "category": "audio",
+    "thumbnails": [
+      "https://example.com/sonos-speaker-1.jpg"
+    ]
+  },
+  {
+    "title": "Tablet Samsung Galaxy Tab S8",
+    "description": "Tablet Android con pantalla Super AMOLED, S Pen incluido y 128GB",
+    "price": 749.99,
+    "status": true,
+    "stock": 15,
+    "category": "tecnologia",
+    "thumbnails": [
+      "https://example.com/samsung-tab-1.jpg",
+      "https://example.com/samsung-tab-2.jpg"
+    ]
+  },
+  {
+    "title": "SSD Samsung 990 PRO 2TB",
+    "description": "Unidad de estado sólido PCIe 4.0 NVMe con velocidades hasta 7450 MB/s",
+    "price": 249.99,
+    "status": true,
+    "stock": 50,
+    "category": "componentes",
+    "thumbnails": [
+      "https://example.com/samsung-ssd-1.jpg"
+    ]
+  },
+  {
+    "title": "Proyector BenQ TH585",
+    "description": "Proyector gaming Full HD con 3500 lúmenes y baja latencia",
+    "price": 599.00,
+    "status": true,
+    "stock": 10,
+    "category": "entretenimiento",
+    "thumbnails": [
+      "https://example.com/benq-projector-1.jpg",
+      "https://example.com/benq-projector-2.jpg"
+    ]
+  },
+  {
+    "title": "Webcam Logitech StreamCam",
+    "description": "Cámara web FullHD para streaming con auto-enfoque y corrección de color",
+    "price": 169.99,
+    "status": true,
+    "stock": 25,
+    "category": "perifericos",
+    "thumbnails": [
+      "https://example.com/logitech-webcam-1.jpg"
+    ]
+  },
+  {
+    "title": "Impresora Multifuncional HP OfficeJet Pro 9015e",
+    "description": "Impresora color con WiFi, impresión doble cara y HP Smart App",
+    "price": 329.99,
+    "status": true,
+    "stock": 20,
+    "category": "oficina",
+    "thumbnails": [
+      "https://example.com/hp-printer-1.jpg",
+      "https://example.com/hp-printer-2.jpg"
+    ]
+  }
+]
