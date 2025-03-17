@@ -90,9 +90,7 @@ class ProductManager {
 
   async createProduct(productData) {
     try {
-      if (!productData.code) {
-        productData.code = uuidv4();
-      }
+      delete productData.uuid;  // Eliminar cualquier UUID proporcionado manualmente
       const newProduct = new Product(productData);
       await newProduct.save();
       return newProduct;
